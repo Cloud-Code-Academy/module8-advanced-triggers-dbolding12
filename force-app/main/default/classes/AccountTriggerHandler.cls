@@ -5,8 +5,8 @@ public with sharing class AccountTriggerHandler extends TriggerHandler{
     public AccountTriggerHandler() {
         this.newAccts = (List<Account>)Trigger.new;
         this.newAcctsMap = (Map<Id, Account>)Trigger.newMap;
-
         //this.setMaxLoopCount(1);
+        
     }
 
     public override void beforeInsert() {
@@ -15,8 +15,7 @@ public with sharing class AccountTriggerHandler extends TriggerHandler{
     }
 
     public override void afterInsert() {
-        AccountHelper.afterAccount(this.newAccts);      
-    
+        AccountHelper.afterAccount(this.newAccts); 
     
     }
 }

@@ -6,8 +6,7 @@ public with sharing class OpportunityHelper {
             if (opp.Type == null){
                 opp.Type = 'New Customer';
             }        
-        } 
-
+        }
     }
 
     public static void isBeforeUpdate(List<Opportunity> opps) {
@@ -28,7 +27,6 @@ public with sharing class OpportunityHelper {
             }
             
         }
-
                                                                  
         if(accountIds.size() > 0) {
             List<Contact> contacts = [SELECT Id, AccountId, Title FROM Contact WHERE AccountId IN :accountIds AND Title = 'CEO'];
@@ -43,7 +41,7 @@ public with sharing class OpportunityHelper {
                         op.Primary_Contact__c = acctConMap.get(op.AccountId).Id;  
 
                  }
-             }       
+            }       
 
          }      
       }     
@@ -65,13 +63,13 @@ public with sharing class OpportunityHelper {
         Map<Id, Account> accountIdMap = new Map<Id, Account>([SELECT Id FROM Account WHERE ID IN :AccountIds AND Industry = 'Banking']);
         for(Opportunity o: opps) {
             if(o.StageName == 'Closed Won'|| o.IsClosed) {
-                o.adderror('Cannot delete closed opportunity');
-                  
+                o.adderror('Cannot delete closed opportunity');                  
 
           }          
           
-        }
+       }
     }
+
     public static void isAfterInsert(List<Opportunity> opps) {
     List<Task> tasks = new List<Task>();
 
@@ -91,12 +89,7 @@ public with sharing class OpportunityHelper {
     }
 
     Public static void isAfterUpdate(List<Opportunity> opps){
-        
-        // for(Opportunity opp : opps) {
-        //     if (opp.StageName != null){
-        //         opp.Description += '\n Stage Change:' + opp.StageName + ':' + DateTime.now().format();
-        //     } 
-        // }
+
        
     }
 
@@ -114,20 +107,17 @@ public with sharing class OpportunityHelper {
         Map<Id, User> mapOpps = new Map<Id, User>([SELECT Id, Email 
                                                   FROM User 
                                                   WHERE Id IN : oppsSet]);
-        
-               
 
-         for (Opportunity opp : opps){
+
+        for (Opportunity opp : opps){
            String ownerEmail = opp.Owner.Email;
             if (opp.Owner.Email != null) {
                 Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
-                //mail.toaddresses = opp.Owner.Email;
                 mail.setToAddresses(new List<String>{mapOpps.get(opp.OwnerId).Email});
                 mail.setSubject('Opportunity Deleted : ' + opp.Name);
                 mail.setPlainTextBody('Your Opportunity: ' + opp.Name +' has been deleted.');
                 mails.add(mail);
-            }                
-              
+            } 
             
         }        
         
@@ -145,9 +135,12 @@ public with sharing class OpportunityHelper {
         for(opportunity o : oppNewMap.values()) {
             accountIds.add(o.AccountId);
         }
+
+        String title = 'VP Sales';
+
         List<Contact> contacts = new List<Contact>([SELECT Id, AccountId 
                                                     FROM Contact 
-                                                    WHERE Title = 'VP Sales' AND AccountId IN :accountIds
+                                                    WHERE Title = :title AND AccountId IN :accountIds
                                                     LIMIT 1]);
 
         Map<Id, Id> acctConMap = new Map<Id, Id>();
@@ -162,17 +155,14 @@ public with sharing class OpportunityHelper {
             if (opp.Primary_Contact__c == null){
                 String primaryContact = acctConMap.get(opp.AccountId);
                 if(primaryContact != null) {
-                    Opportunity oppToUpdate = new Opportunity(Id = opp.Id);
-                    oppToUpdate.Primary_Contact__c = primaryContact;
-                    oppMap.put(opp.Id, oppToUpdate);
+                    opp.Primary_Contact__c = primaryContact;
+                    oppMap.put(opp.Id, opp);
 
-                }
-                
-            }            
+              }                
+           }            
         }
-        update oppMap.values();
+         update oppMap.values();
     }
-
 
 }
     
