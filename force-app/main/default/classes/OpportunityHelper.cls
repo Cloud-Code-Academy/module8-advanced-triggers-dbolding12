@@ -85,7 +85,7 @@ public with sharing class OpportunityHelper {
      
         }
 
-        insert tasks;
+        insert tasks; 
     }
 
     Public static void isAfterUpdate(List<Opportunity> opps){
@@ -157,12 +157,12 @@ public with sharing class OpportunityHelper {
                 if(primaryContact != null) {
                     Opportunity oppToUpdate = new Opportunity(Id = opp.Id);
                     oppToUpdate.Primary_Contact__c = primaryContact;
-                    oppMap.put(opp.Id, opp);
+                    oppMap.put(opp.Id, oppToUpdate);
 
               }                
            }            
         }
-        insert oppMap.values();
+        update oppMap.values();
     }
 
 }
