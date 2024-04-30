@@ -155,13 +155,14 @@ public with sharing class OpportunityHelper {
             if (opp.Primary_Contact__c == null){
                 String primaryContact = acctConMap.get(opp.AccountId);
                 if(primaryContact != null) {
-                    opp.Primary_Contact__c = primaryContact;
+                    Opportunity oppToUpdate = new Opportunity(Id = opp.Id);
+                    oppToUpdate.Primary_Contact__c = primaryContact;
                     oppMap.put(opp.Id, opp);
 
               }                
            }            
         }
-         update oppMap.values();
+        insert oppMap.values();
     }
 
 }

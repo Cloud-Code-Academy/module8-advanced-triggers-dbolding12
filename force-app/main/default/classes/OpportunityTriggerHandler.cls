@@ -9,7 +9,6 @@ public with sharing class OpportunityTriggerHandler extends TriggerHandler{
         this.oldOpps = (List<Opportunity>)Trigger.old;
         this.oldOppsMap = (Map<Id, Opportunity>)Trigger.oldMap;
         this.newOppsMap = (Map<Id, Opportunity>)Trigger.newMap;
-
         //this.setMaxLoopCount(1);
 
     }
@@ -43,7 +42,7 @@ public with sharing class OpportunityTriggerHandler extends TriggerHandler{
     }
 
     public override void afterUndelete() {
-        OpportunityHelper.assignPrimaryContact( this.newOppsMap);
+        OpportunityHelper.assignPrimaryContact(this.newOppsMap);
     }
 
    
